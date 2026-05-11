@@ -1,0 +1,45 @@
+services:
+  shady-url:
+    build: ./app
+    container_name: shady-url
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=proxy"
+        - "traefik.http.routers.shady-url.rule=Host(`spam.marcel.co.nz`)"
+        - "traefik.http.routers.shady-url.entrypoints=websecure"
+        - "traefik.http.routers.shady-url.tls=true"
+        - "traefik.http.routers.shady-url.tls.certresolver=myresolver"
+        - "traefik.http.services.shady-url.loadbalancer.server.port=8000"
+        
+        - "traefik.http.middlewares.shady-url-ratelimit.ratelimit.average=100"
+        - "traefik.http.middlewares.shady-url-ratelimit.ratelimit.burst=50"
+
+        - "traefik.http.middlewares.shady-url-buffer.buffering.maxRequestBodyBytes=5242880"
+
+        - "traefik.http.routers.shady-url.middlewares=shady-url-ratelimit,shady-url-buffer"
+    networks:
+      - proxy
+
+  redis:
+    image: redis:7-alpine
+    container_name: shady-url-redis
+    restart: unless-stopped
+
+    command: redis-server --appendonly yes
+
+    volumes:
+      - redis-data:/data
+    networks:
+      -proxy
+    
+volumes:
+  redis-data:
+
+networks:
+  proxy:
+    external: true
