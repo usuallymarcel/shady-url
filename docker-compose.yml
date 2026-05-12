@@ -10,7 +10,7 @@ services:
     labels:
         - "traefik.enable=true"
         - "traefik.docker.network=proxy"
-        - "traefik.http.routers.shady-url.rule=Host(`spam.marcel.co.nz`)"
+        - "traefik.http.routers.shady-url.rule=Host(`url.marcel.co.nz`)"
         - "traefik.http.routers.shady-url.entrypoints=websecure"
         - "traefik.http.routers.shady-url.tls=true"
         - "traefik.http.routers.shady-url.tls.certresolver=myresolver"
