@@ -120,6 +120,8 @@ python-multipart==0.0.24
     # via fastapi
 pyyaml==6.0.3
     # via uvicorn
+redis==7.4.0
+    # via -r requirements.in
 rich==14.3.3
     # via
     #   rich-toolkit

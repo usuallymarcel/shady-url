@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import redis
+from config import r
 
 app = FastAPI()
 
@@ -19,4 +21,5 @@ app.add_middleware(
 
 @app.get("/")
 async def index():
+    r.set("hello", "world")
     return {'piss': 'poo'}
