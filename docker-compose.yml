@@ -1,6 +1,6 @@
 services:
   shady-url:
-    build: ./app
+    build: .
     container_name: shady-url
     restart: unless-stopped
     env_file:
