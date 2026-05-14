@@ -20,13 +20,13 @@ const generateUrl = async () => {
 
     const res = await fetch(API_URL + '/generate', {
         method: 'POST',
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url: url })
     })
 
     const urlRes = await res.json()
 
-    output.textContent = urlRes.url
+    output.textContent = window.location.href + urlRes.url
 }
