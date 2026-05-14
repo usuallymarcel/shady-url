@@ -1,5 +1,32 @@
-const API_URL = window.EncodedVideoChunk.API_URL
+const API_URL = window.ENV.API_URL
+
+const input = document.getElementById('url-input')
+const output = document.getElementById('url-response')
+const button = document.getElementById('url-button')
 
 document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById('url-input')
+    input.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            await generateUrl()
+        }
+    })
+
+    button.addEventListener('click', generateUrl)
 })
+
+const generateUrl = async () => {
+    const url = input.value
+
+    const res = await fetch(API_URL + '/generate', {
+        method: 'POST',
+        header: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url })
+    })
+
+    const urlRes = await res.json()
+
+    output.textContent = urlRes.url
+}

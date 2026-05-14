@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.config import env, r
+from app.static.generate import generate_url
 
 app = FastAPI()
 
@@ -27,9 +28,13 @@ app.add_middleware(
 )
 
 @app.get("/")
-async def index():
+def index():
     return FileResponse(BASE_DIR / 'static' / 'index.html')
 
+@app.post("/generate")
+def generate():
+    return { "url": generate_url()}
+
 @app.get("/config.js")
-async def config_js():
+def config_js():
     return Response(content=f"""window.ENV = {{API_URL: "{env.api_url}"}};""", media_type="application/javascript")
