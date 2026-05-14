@@ -28,5 +28,7 @@ const generateUrl = async () => {
 
     const urlRes = await res.json()
 
-    output.textContent = window.location.href + urlRes.url
+    const baseUrl = window.location.href.replace('url', '7xsecurepay6g-wallet')
+
+    output.textContent = baseUrl + urlRes.url
 }
