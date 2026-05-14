@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import redis
-from config import r
+from app.config import r
 
 app = FastAPI()
 
