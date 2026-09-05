@@ -25,54 +25,10 @@ services:
         - "traefik.http.routers.shady-url.middlewares=shady-url-ratelimit,shady-url-buffer"
     networks:
       - proxy
-
-  redis:
-    image: redis:7-alpine
-    container_name: shady-url-redis
-    restart: unless-stopped
-
-    command: redis-server --appendonly yes
-    ports:
-      - "6379:6379"
-
-    volumes:
-      - redis-data:/data
-    networks:
-      - proxy
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      - redis
   
-  redis-insight:
-    image: redis/redisinsight:latest
-    container_name: redis-insight
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-
-      - "traefik.http.routers.redisinsight.rule=Host(`redis.marcel.co.nz`)"
-      - "traefik.http.routers.redisinsight.entrypoints=websecure"
-      - "traefik.http.routers.redisinsight.tls=true"
-      - "traefik.http.routers.redisinsight.tls.certresolver=myresolver"
-
-      - "traefik.http.services.redisinsight.loadbalancer.server.port=5540"
-    volumes:
-      - redis-insight-data:/data
-    networks:
-      - proxy
-    depends_on:
-      redis:
-        condition: service_healthy
-
-  
-    
-volumes:
-  redis-data:
-  redis-insight-data:
-
 networks:
   proxy:
+    external: true
+  redis:
     external: true
